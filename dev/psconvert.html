@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>psconvert &mdash; GMT 6.3.0 documentation</title>
+  <title>psconvert &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -48,7 +48,7 @@
             <a href="index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul>
@@ -340,10 +341,10 @@ cases when the plot has any of the sides with whites only because
 than the algorithm will fail miserably as those whites will be eaten
 by the Ghostscript. In that case you really must use <strong>-B</strong> or use a
 slightly off-white color.</p>
-<p>Together with <strong>-V</strong> it prints on screen the gdal_translate
-(gdal_translate is a command line tool from the GDAL package)
+<p>Together with <strong>-V</strong> it prints on screen the <em>gdal_translate</em>
+(<em>gdal_translate</em> is a command line tool from the <a class="reference external" href="https://gdal.org/">GDAL package</a>)
 command that reads the raster + world file and creates a true
-geotiff file. Append <strong>+g</strong> to do a system call to gdal_translate
+geotiff file. Append <strong>+g</strong> to do a system call to <em>gdal_translate</em>
 and create a geoTIFF image right away. The output file will have a
 .tiff extension.</p>
 <p>The world file naming follows the convention of jamming a ‘w’ in the
@@ -528,7 +529,7 @@ fine-tune the result. Use <strong>-S</strong> to examine the actual command used
 add custom options via one or more instances of the <strong>-C</strong> option. For
 instance, to turn on image interpolation for all images, improving image
 quality for scaled images at the expense of speed, use
-<strong>-C</strong>-dDOINTERPOLATE. See www.ghostscript.com for complete
+<strong>-C</strong>-dDOINTERPOLATE. See <a class="reference external" href="https://www.ghostscript.com/">https://www.ghostscript.com/</a> for complete
 documentation.</p>
 </section>
 <section id="making-kmz-files">
@@ -564,8 +565,8 @@ use it.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 

@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contributors Guide &mdash; GMT 6.3.0 documentation</title>
+  <title>Contributors Guide &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -48,7 +48,7 @@
             <a href="../index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul>
@@ -128,6 +129,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#reviewing-test-failures">Reviewing test failures</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#updating-reference-plots-for-tests">Updating reference plots for tests</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#adding-new-tests">Adding new tests</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#managing-test-images-using-data-version-control-dvc">Managing Test Images Using Data Version Control (dvc)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#setting-up-your-local-environment-for-dvc">Setting up your local environment for dvc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pulling-files-from-the-remote-for-testing">Pulling files from the remote for testing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#migrating-existing-test-images-to-dvc">Migrating existing test images to dvc</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#debugging-gmt">Debugging GMT</a></li>
@@ -501,6 +508,10 @@ against a reference case.</p>
 <p>Tests that are known to fail are excluded by adding <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">GMT_KNOWN_FAILURE</span></code> anywhere in the test script.</p>
 <section id="running-tests">
 <h4>Running tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h4>
+<p>First, pull any baseline images stored in the DAGsHub repository using dvc:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dvc pull
+</pre></div>
+</div>
 <p>After configuring CMake and building GMT, you can run all the tests by running this command in the build directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake --build . --target check
 </pre></div>
@@ -594,6 +605,60 @@ section.</p></li>
 </ul>
 </section>
 </section>
+<section id="managing-test-images-using-data-version-control-dvc">
+<h3>Managing Test Images Using Data Version Control (dvc)<a class="headerlink" href="#managing-test-images-using-data-version-control-dvc" title="Permalink to this headline">¶</a></h3>
+<p>As the baseline images are large blob files that can change often, it is not ideal to store them in <code class="docutils literal notranslate"><span class="pre">git</span></code>. Instead,
+we use <a class="reference external" href="https://dvc.org/">data version control (dvc)</a> to track the test images, which is like <code class="docutils literal notranslate"><span class="pre">git</span></code> but for data.
+<code class="docutils literal notranslate"><span class="pre">dvc</span></code> stores the hash (md5sum) of a file or an md5sum that describes the contents of a directory. For each test
+<code class="docutils literal notranslate"><span class="pre">test/&lt;module&gt;/*.sh</span></code> that generates a .PS file, there is a baseline image file in <code class="docutils literal notranslate"><span class="pre">test/baseline/&lt;module&gt;/</span></code>
+that is compared to the test result using <a class="reference external" href="http://www.graphicsmagick.org/">GraphicsMagick</a>. Each of the
+directories <code class="docutils literal notranslate"><span class="pre">test/baseline/&lt;module&gt;</span></code> are tracked by <code class="docutils literal notranslate"><span class="pre">dvc</span></code> using the file <code class="docutils literal notranslate"><span class="pre">test/baseline/&lt;module&gt;.dvc</span></code>. This file
+contains the hash of a JSON .dir file stored in the .dvc cache. The .dir file contains information about each tracked
+file in the directory, which is used to push/pull the files to/from remote storage. The <code class="docutils literal notranslate"><span class="pre">test/baseline/&lt;module&gt;.dvc</span></code>
+files are stored as usual on GitHub, while the .PS files are stored separately on the <code class="docutils literal notranslate"><span class="pre">dvc</span></code> remote at
+<a class="reference external" href="https://dagshub.com/GenericMappingTools/gmt">https://dagshub.com/GenericMappingTools/gmt</a>.</p>
+<section id="setting-up-your-local-environment-for-dvc">
+<h4>Setting up your local environment for dvc<a class="headerlink" href="#setting-up-your-local-environment-for-dvc" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://dvc.org/doc/install">Install dvc</a></p></li>
+<li><p>If you will need to push baseline images to the remote, ask a GMT maintainer to add you as a collaborator on
+<a class="reference external" href="https://dagshub.com/GenericMappingTools/gmt">DAGsHub</a>.</p></li>
+<li><p>If you will need to push baseline imaged to the remote, set up
+<a class="reference external" href="https://dagshub.com/docs/reference/dagshub_storage/#pushing-files-or-using-a-private-repo">authentication for the DVC remote</a>.</p></li>
+</ol>
+</section>
+<section id="pulling-files-from-the-remote-for-testing">
+<h4>Pulling files from the remote for testing<a class="headerlink" href="#pulling-files-from-the-remote-for-testing" title="Permalink to this headline">¶</a></h4>
+<p>To pull or sync files from the <code class="docutils literal notranslate"><span class="pre">dvc</span></code> remote to your local repository, the commands are similar to <code class="docutils literal notranslate"><span class="pre">git</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dvc status  <span class="c1"># should report any files &#39;not_in_cache&#39;</span>
+dvc pull    <span class="c1"># pull down files from DVC remote cache (fetch + checkout)</span>
+</pre></div>
+</div>
+<p>Once the sync is complete, you should notice that there are images stored in the <code class="docutils literal notranslate"><span class="pre">test/baseline/&lt;module&gt;</span></code>
+directories (e.g., <code class="docutils literal notranslate"><span class="pre">test/baseline/api/api_matrix_as_grid.ps</span></code>). These images are technically reflinks/symlinks/copies
+of the files under the <code class="docutils literal notranslate"><span class="pre">.dvc/cache</span></code> directory. You can now run the test suite as usual.</p>
+</section>
+<section id="migrating-existing-test-images-to-dvc">
+<h4>Migrating existing test images to dvc<a class="headerlink" href="#migrating-existing-test-images-to-dvc" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p>Sync with git and dvc remotes (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">master;</span> <span class="pre">git</span> <span class="pre">pull;</span> <span class="pre">dvc</span> <span class="pre">pull</span></code>).</p></li>
+<li><p>Create a branch for the module that you are working on (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">switch</span> <span class="pre">-c</span> <span class="pre">migrate-&lt;module&gt;-tests</span></code>).</p></li>
+<li><p>Navigate to the test directory (<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">test</span></code>).</p></li>
+<li><p>Remove the test image from git tracking (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span> <span class="pre">--cached</span> <span class="pre">&lt;module&gt;/&lt;test-image&gt;.ps</span></code>).</p></li>
+<li><p>Create a new directory for the image in <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, if one does not already exist (<code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">baseline/&lt;module&gt;</span></code>).</p></li>
+<li><p>Move the test image to the new directory (<code class="docutils literal notranslate"><span class="pre">mv</span> <span class="pre">&lt;module&gt;/&lt;test-image&gt;.ps</span> <span class="pre">baseline/&lt;module&gt;/</span></code>).</p></li>
+<li><p>Add a comment <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">DVC_TEST</span></code> to the test script that references the image. This is used to specify that the testing
+mechanism should search in <code class="docutils literal notranslate"><span class="pre">baseline/&lt;module&gt;</span></code> for the baseline image.</p></li>
+<li><p>Repeat steps 4, 6, and 7 for other .PS based tests for the module.</p></li>
+<li><p>Run the GMT test suite to check that the tests work properly with the new structure.</p></li>
+<li><p>Add the directory to dvc (<code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span> <span class="pre">baseline/&lt;module&gt;</span></code>).</p></li>
+<li><p>Commit the .dvc and modified .gitignore files to git (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">baseline/&lt;module&gt;.dvc</span> <span class="pre">baseline/.gitignore;</span> <span class="pre">git</span> <span class="pre">commit</span></code>).</p></li>
+<li><p>Push the changes to git (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">-u</span> <span class="pre">origin</span> <span class="pre">migrate-&lt;module&gt;-tests</span></code>).</p></li>
+<li><p>Push the changes to dvc (<code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">push</span></code>).</p></li>
+<li><p>Open a pull request for the changes.</p></li>
+</ol>
+</section>
+</section>
 <section id="debugging-gmt">
 <h3>Debugging GMT<a class="headerlink" href="#debugging-gmt" title="Permalink to this headline">¶</a></h3>
 <p>Guides for debugging GMT are provided in the <a class="reference internal" href="debug.html"><span class="doc">Debugging GMT</span></a> section of the GMT documentation.</p>
@@ -612,8 +677,8 @@ section.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 

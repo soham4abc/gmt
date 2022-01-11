@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gmtmath &mdash; GMT 6.3.0 documentation</title>
+  <title>gmtmath &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -48,7 +48,7 @@
             <a href="index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul>
@@ -156,7 +157,7 @@
 [ <a class="reference internal" href="#t"><span><strong>-T</strong></span></a></strong>[<em>min</em>/<em>max</em>/<em>inc</em>[<strong>+b</strong>|<strong>i</strong>|<strong>l</strong>|<strong>n</strong>]|<em>file</em>|<em>list</em>] ]
 [ <a class="reference internal" href="#v"><span><strong>-V</strong></span></a></strong>[<em>level</em>] ]
 [ <strong>-b</strong><a class="reference internal" href="gmt.html#bi-full"><span class="std std-ref">binary</span></a> ]
-[ <strong>-d</strong>[<strong>+c</strong><em>col</em>]<a class="reference internal" href="gmt.html#d-full"><span class="std std-ref">nodata</span></a> ]
+[ <strong>-d</strong><a class="reference internal" href="gmt.html#d-full"><span class="std std-ref">nodata</span></a>[<strong>+c</strong><em>col</em>] ]
 [ <strong>-e</strong><a class="reference internal" href="gmt.html#e-full"><span class="std std-ref">regexp</span></a> ]
 [ <strong>-f</strong><a class="reference internal" href="gmt.html#f-full"><span class="std std-ref">flags</span></a> ]
 [ <strong>-g</strong><a class="reference internal" href="gmt.html#g-full"><span class="std std-ref">gaps</span></a> ]
@@ -195,12 +196,12 @@ for future use or stored and recalled via named memory locations.</p>
 <dt><em>operand</em></dt><dd><p>If <em>operand</em> can be opened as a file it will be read as an ASCII (or
 binary, see <strong>-bi</strong>) table data file. If not
 a file, it is interpreted as a numerical constant or a special
-symbol (see below). The special argument STDIN means that <em>stdin</em>
+symbol (see below). The special argument STDIN means that standard input
 will be read and placed on the stack; STDIN can appear more than
 once if necessary.</p>
 </dd>
 <dt><em>outfile</em></dt><dd><p>The name of a table data file that will hold the final result. If
-not given then the output is sent to <em>stdout</em>.</p>
+not given then the output is sent to standard output.</p>
 </dd>
 </dl>
 </section>
@@ -622,169 +623,177 @@ and output arguments.</p>
 <td><p>1 1</p></td>
 <td><p>Converts Degrees to Radians</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>DENAN</strong></p></td>
+<tr class="row-odd"><td><p><strong>DEG2KM</strong></p></td>
+<td><p>1 1</p></td>
+<td><p>Converts Spherical Degrees to Kilometers</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>DENAN</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>Replace NaNs in A with values from B</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>DILOG</strong></p></td>
+<tr class="row-odd"><td><p><strong>DILOG</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>dilog (A)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>DIFF</strong></p></td>
+<tr class="row-even"><td><p><strong>DIFF</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Forward difference between adjacent elements of A (A[1]-A[0], A[2]-A[1], …, NaN)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>DIV</strong></p></td>
+<tr class="row-odd"><td><p><strong>DIV</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>A / B</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>DUP</strong></p></td>
+<tr class="row-even"><td><p><strong>DUP</strong></p></td>
 <td><p>1 2</p></td>
 <td><p>Places duplicate of A on the stack</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>ECDF</strong></p></td>
+<tr class="row-odd"><td><p><strong>ECDF</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>Exponential cumulative distribution function for x = A and lambda = B</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>ECRIT</strong></p></td>
+<tr class="row-even"><td><p><strong>ECRIT</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>Exponential distribution critical value for alpha = A and lambda = B</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>EPDF</strong></p></td>
+<tr class="row-odd"><td><p><strong>EPDF</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>Exponential probability density function for x = A and lambda = B</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>ERF</strong></p></td>
+<tr class="row-even"><td><p><strong>ERF</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Error function erf (A)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>ERFC</strong></p></td>
+<tr class="row-odd"><td><p><strong>ERFC</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Complementary Error function erfc (A)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>ERFINV</strong></p></td>
+<tr class="row-even"><td><p><strong>ERFINV</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Inverse error function of A</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>EQ</strong></p></td>
+<tr class="row-odd"><td><p><strong>EQ</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>1 if A == B, else 0</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>EXCH</strong></p></td>
+<tr class="row-even"><td><p><strong>EXCH</strong></p></td>
 <td><p>2 2</p></td>
 <td><p>Exchanges A and B on the stack</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>EXP</strong></p></td>
+<tr class="row-odd"><td><p><strong>EXP</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>exp (A)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>FACT</strong></p></td>
+<tr class="row-even"><td><p><strong>FACT</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>A! (A factorial)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>FCDF</strong></p></td>
+<tr class="row-odd"><td><p><strong>FCDF</strong></p></td>
 <td><p>3 1</p></td>
 <td><p>F cumulative distribution function for F = A, nu1 = B, and nu2 = C</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>FCRIT</strong></p></td>
+<tr class="row-even"><td><p><strong>FCRIT</strong></p></td>
 <td><p>3 1</p></td>
 <td><p>F distribution critical value for alpha = A, nu1 = B, and nu2 = C</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>FLIPUD</strong></p></td>
+<tr class="row-odd"><td><p><strong>FLIPUD</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Reverse order of each column</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>FLOOR</strong></p></td>
+<tr class="row-even"><td><p><strong>FLOOR</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>floor (A) (greatest integer &lt;= A)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>FMOD</strong></p></td>
+<tr class="row-odd"><td><p><strong>FMOD</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>A % B (remainder after truncated division)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>FPDF</strong></p></td>
+<tr class="row-even"><td><p><strong>FPDF</strong></p></td>
 <td><p>3 1</p></td>
 <td><p>F probability density function for F = A, nu1 = B, and nu2 = C</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>GE</strong></p></td>
+<tr class="row-odd"><td><p><strong>GE</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>1 if A &gt;= B, else 0</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>GT</strong></p></td>
+<tr class="row-even"><td><p><strong>GT</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>1 if A &gt; B, else 0</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>HSV2LAB</strong></p></td>
+<tr class="row-odd"><td><p><strong>HSV2LAB</strong></p></td>
 <td><p>3 3</p></td>
 <td><p>Convert h,s,v triplets to l,a,b triplets, with h = A (0-360), s = B and v = C (0-1)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>HSV2RGB</strong></p></td>
+<tr class="row-even"><td><p><strong>HSV2RGB</strong></p></td>
 <td><p>3 3</p></td>
 <td><p>Convert h,s,v triplets to r,g,b triplets, with h = A (0-360), s = B and v = C (0-1)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>HSV2XYZ</strong></p></td>
+<tr class="row-odd"><td><p><strong>HSV2XYZ</strong></p></td>
 <td><p>3 3</p></td>
 <td><p>Convert h,s,v triplets to x,t,z triplets, with h = A (0-360), s = B and v = C (0-1)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>HYPOT</strong></p></td>
+<tr class="row-even"><td><p><strong>HYPOT</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>hypot (A, B) = sqrt (A*A + B*B)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>I0</strong></p></td>
+<tr class="row-odd"><td><p><strong>I0</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Modified Bessel function of A (1st kind, order 0)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>I1</strong></p></td>
+<tr class="row-even"><td><p><strong>I1</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Modified Bessel function of A (1st kind, order 1)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>IFELSE</strong></p></td>
+<tr class="row-odd"><td><p><strong>IFELSE</strong></p></td>
 <td><p>3 1</p></td>
 <td><p>B if A != 0, else C</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>IN</strong></p></td>
+<tr class="row-even"><td><p><strong>IN</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>Modified Bessel function of A (1st kind, order B)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>INRANGE</strong></p></td>
+<tr class="row-odd"><td><p><strong>INRANGE</strong></p></td>
 <td><p>3 1</p></td>
 <td><p>1 if B &lt;= A &lt;= C, else 0</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>INT</strong></p></td>
+<tr class="row-even"><td><p><strong>INT</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Numerically integrate A</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>INV</strong></p></td>
+<tr class="row-odd"><td><p><strong>INV</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>1 / A</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>ISFINITE</strong></p></td>
+<tr class="row-even"><td><p><strong>ISFINITE</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>1 if A is finite, else 0</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>ISNAN</strong></p></td>
+<tr class="row-odd"><td><p><strong>ISNAN</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>1 if A == NaN, else 0</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>J0</strong></p></td>
+<tr class="row-even"><td><p><strong>J0</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Bessel function of A (1st kind, order 0)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>J1</strong></p></td>
+<tr class="row-odd"><td><p><strong>J1</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Bessel function of A (1st kind, order 1)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>JN</strong></p></td>
+<tr class="row-even"><td><p><strong>JN</strong></p></td>
 <td><p>2 1</p></td>
 <td><p>Bessel function of A (1st kind, order B)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>K0</strong></p></td>
+<tr class="row-odd"><td><p><strong>K0</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Modified Kelvin function of A (2nd kind, order 0)</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>K1</strong></p></td>
+<tr class="row-even"><td><p><strong>K1</strong></p></td>
 <td><p>1 1</p></td>
 <td><p>Modified Bessel function of A (2nd kind, order 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>KM2DEG</strong></p></td>
+<td><p>1 1</p></td>
+<td><p>Converts Kilometers to Spherical Degrees</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>KN</strong></p></td>
 <td><p>2 1</p></td>
@@ -1554,8 +1563,8 @@ Publishing Corp.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 

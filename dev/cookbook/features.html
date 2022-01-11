@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3. General Features &mdash; GMT 6.3.0 documentation</title>
+  <title>3. General Features &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -27,7 +27,7 @@
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -49,7 +49,7 @@
             <a href="../index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -65,6 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul class="current">
@@ -833,7 +834,7 @@ tells you where the trouble is.</p>
 <h2><span class="section-number">3.7. </span>Standard input or file, header records<a class="headerlink" href="#standard-input-or-file-header-records" title="Permalink to this headline">¶</a></h2>
 <p>Most of the programs which expect table data input can read either
 standard input or input in one or several files. These programs will try
-to read <em>stdin</em> unless you type the filename(s) on the command line
+to read standard input unless you type the filename(s) on the command line
 without the above hyphens. (If the program sees a hyphen, it reads the
 next character as an instruction; if an argument begins without a
 hyphen, it tries to open this argument as a filename).  This feature
@@ -3595,7 +3596,7 @@ of the third (depth) variable associated with the requested layer. To
 indicate the second layer of the 3-D variable “slp” use as file name: <code class="docutils literal notranslate"><span class="pre">file.nc?slp[1]</span></code>.</p>
 <p>When you supply the numerical value for the third variable using
 “(<em>level</em>)”, GMT will pick the layer closest to that value. No
-interpolation is performed.</p>
+interpolation is performed (for such interpolations, see <a class="reference internal" href="../grdinterpolate.html"><span class="doc">grdinterpolate</span></a>).</p>
 <p>Note that the question mark, brackets and parentheses have special
 meanings on Unix-based platforms. Therefore, you will need to either
 <em>escape</em> these characters, by placing a backslash in front of them, or
@@ -3742,7 +3743,7 @@ which is defined as NDVI = (NIR - R) / (NIR + R), as</p>
 <p>It is also possible to access to sub-datasets in a multi-band grid. The
 next example shows how we can extract the SST from the MODIS file <code class="docutils literal notranslate"><span class="pre">A20030012003365.L3m_YR_NSST_9</span></code>
 that is stored in the HDF “format”. We need to run the GDAL program
-<strong>gdalinfo</strong> on the file because we first
+<em>gdalinfo</em> on the file because we first
 must extract the necessary metadata from the file:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gdalinfo A20030012003365.L3m_YR_NSST_9
 Driver: HDF4/Hierarchical Data Format Release 4
@@ -3807,7 +3808,7 @@ via <a class="reference internal" href="../grdmath.html"><span class="doc">grdma
 <p>Saving images in the common raster formats is possible but, for the time being, only from <a class="reference internal" href="../grdimage.html"><span class="doc">grdimage</span></a> and even
 that is restricted to raster type information. That is, vector data (for instance, coast lines) or text will not
 be saved. To save an image with <a class="reference internal" href="../grdimage.html"><span class="doc">grdimage</span></a> use the <strong>-A</strong><em>outimg=driver</em> mechanism, where <em>driver</em>
-is the driver code name used by GDAL (e.g. GTiff) (run <cite>gdal_translate --formats</cite> for the full list.)</p>
+is the driver code name used by GDAL (e.g. GTiff) (run <em>gdal_translate --formats</em> for the full list.)</p>
 <p>For all other programs that create grids, it is also possible to save them using GDAL. To do it one need to use
 the =gd appended with the necessary information regarding the driver and the data type to use. Generically,
 =<strong>gd</strong>[<strong>+s</strong><em>scale</em>][<strong>+o</strong><em>offset</em>][<strong>+n</strong><em>nan</em>][:&lt;<em>driver</em>&gt;[/<em>dataType</em>][<strong>+c</strong><em>options</em>]]
@@ -3967,8 +3968,8 @@ off; see <a class="reference internal" href="../gmt.conf.html#term-PS_COMMENTS">
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 

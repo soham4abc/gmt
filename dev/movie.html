@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>movie &mdash; GMT 6.3.0 documentation</title>
+  <title>movie &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -48,7 +48,7 @@
             <a href="index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul>
@@ -194,22 +195,71 @@ and we build hidden movie scripts using the same language.  Parameters that can 
 are discussed below.</p>
 </dd>
 </dl>
-<dl class="simple" id="c">
+<dl id="c">
 <dt><strong>-C</strong><em>canvassize</em></dt><dd><p>Specify the canvas size used when composing the movie frames. You can choose from a
-set of preset formats or specify a custom layout.  The named 16:9 ratio
-formats have a canvas dimension of 24 x 13.5 cm <em>or</em> 9.6 x 5.4 inch and are
-(with pixel dimensions given in parenthesis):
-<strong>4320p</strong> (7680 x 4320), <strong>2160p</strong> (3840 x 2160), <strong>1080p</strong> (1920 x 1080), <strong>720p</strong> (1280 x 720),
-<strong>540p</strong> (960 x 540), <strong>480p</strong> (854 x 480), <strong>360p</strong> (640 x 360), and <strong>240p</strong> (426 x 240).
-We also accept <strong>8k</strong> or <strong>uhd-2</strong> to mean <strong>4320p</strong>, <strong>4k</strong> or <strong>uhd</strong> to mean <strong>2160p</strong>, and <strong>hd</strong> to mean <strong>1080p</strong>.
-The recognized 4:3 ratio formats have a canvas dimension of 24 x 18 cm <em>or</em> 9.6 x 7.2 inch
-and are (with pixel dimensions given in parenthesis):
-<strong>uxga</strong> (1600 x 1200), <strong>sxga+</strong> (1400 x 1050), <strong>xga</strong> (1024 x 768),
-<strong>svga</strong> (800 x 600), and <strong>dvd</strong> (640 x 480).
+set of preset formats (see Table <a class="reference internal" href="#tbl-presets"><span class="std std-ref">Presets</span></a>) or specify a custom layout.
 <strong>Note</strong>: Your <a class="reference internal" href="gmt.conf.html#term-PROJ_LENGTH_UNIT"><span class="xref std std-term">PROJ_LENGTH_UNIT</span></a> setting determines if <strong>movie</strong> sets
 you up to work with the SI or US canvas dimensions.  Instead of a named format you can
 request a custom format directly by giving <em>width</em>x<em>height</em>x<em>dpu</em>,
 where <em>dpu</em> is the dots-per-unit pixel density (pixel density is set automatically for the named formats).</p>
+<table class="docutils align-default" id="tbl-presets">
+<colgroup>
+<col style="width: 69%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Preset format (alias)</p></th>
+<th class="head"><p>Pixel dimensions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><em>16:9 (24x13.5 cm or 9.6x5.4 inch)</em></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4320p (8k and uhd-2)</p></td>
+<td><p>7680 x 4320</p></td>
+</tr>
+<tr class="row-even"><td><p>2160p (4k and uhd)</p></td>
+<td><p>3840 x 2160</p></td>
+</tr>
+<tr class="row-odd"><td><p>1080p (hd)</p></td>
+<td><p>1920 x 1080</p></td>
+</tr>
+<tr class="row-even"><td><p>720p</p></td>
+<td><p>1280 x 720</p></td>
+</tr>
+<tr class="row-odd"><td><p>540p</p></td>
+<td><p>960 x 540</p></td>
+</tr>
+<tr class="row-even"><td><p>480p</p></td>
+<td><p>854 x 480</p></td>
+</tr>
+<tr class="row-odd"><td><p>360p</p></td>
+<td><p>640 x 360</p></td>
+</tr>
+<tr class="row-even"><td><p>240p</p></td>
+<td><p>426 x 240</p></td>
+</tr>
+<tr class="row-odd"><td><p><em>4:3 (24x18 cm or 9.6x7.2 inch)</em></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>uxga</p></td>
+<td><p>1600 x 1200</p></td>
+</tr>
+<tr class="row-odd"><td><p>sxga+</p></td>
+<td><p>1400 x 1050</p></td>
+</tr>
+<tr class="row-even"><td><p>xga</p></td>
+<td><p>1024 x 768</p></td>
+</tr>
+<tr class="row-odd"><td><p>svga</p></td>
+<td><p>800 x 600</p></td>
+</tr>
+<tr class="row-even"><td><p>dvd</p></td>
+<td><p>640 x 480</p></td>
+</tr>
+</tbody>
+</table>
 </dd>
 </dl>
 <dl class="simple" id="n">
@@ -305,7 +355,8 @@ We fade from and to black by default; append <strong>+g</strong><em>fill</em> to
 </dd>
 </dl>
 <dl class="simple" id="l">
-<dt><strong>-L</strong><em>labelinfo</em>[<em>modifiers</em>]</dt><dd><p>Automatic labeling of individual frames.  Repeatable up to 32 labels.  Places the chosen label at the frame perimeter:
+<dt><strong>-L</strong><em>labelinfo</em>[<em>modifiers</em>]</dt><dd><p>Automatic labeling of individual frames [Default is running frame number (f)].
+Repeatable up to 32 labels.  Places the chosen label at the frame perimeter:
 <strong>e</strong> selects the elapsed time in seconds as the label; append <strong>+s</strong><em>scale</em> to set the length
 in seconds of each frame [Default is 1/<em>framerate</em>],
 <strong>s</strong><em>string</em> uses the fixed text <em>string</em> as the label,
@@ -744,8 +795,8 @@ for various solutions.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 

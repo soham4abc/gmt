@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>legend &mdash; GMT 6.3.0 documentation</title>
+  <title>legend &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -48,7 +48,7 @@
             <a href="index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -64,6 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul>
@@ -168,7 +169,7 @@
 <section id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
 <p>Makes legends that can be overlaid on maps. It reads
-specific legend-related information from an input file [or stdin].
+specific legend-related information from an input file [or standard input].
 Unless otherwise noted, annotations will be made using the primary
 annotation font and size in effect (i.e., <a class="reference internal" href="gmt.conf.html#term-FONT_ANNOT_PRIMARY"><span class="xref std std-term">FONT_ANNOT_PRIMARY</span></a>)</p>
 <figure class="align-center" id="id1">
@@ -244,8 +245,8 @@ individual <a class="reference internal" href="cookbook/features.html#plt-units"
 <dl class="simple" id="m">
 <dt><strong>-M</strong></dt><dd><p>Modern mode only: Read both (1) the hidden auto-generated legend information file created by
 plotting-modules’ <strong>-l</strong> option and (2) additional information from input file(s) given on the
-command line (or via <em>stdin</em>) [hidden file only].  For classic mode an input file must be
-given or else we will read from <em>stdin</em>.</p>
+command line (or via standard input) [hidden file only].  For classic mode an input file must be
+given or else we will read from standard input.</p>
 </dd>
 </dl>
 <dl class="simple" id="r">
@@ -408,9 +409,9 @@ value to <strong>-</strong>.</p>
 of the column, with the optional explanatory <em>text</em> starting <em>dx2</em>
 from the margin, printed with <a class="reference internal" href="gmt.conf.html#term-FONT_ANNOT_PRIMARY"><span class="xref std std-term">FONT_ANNOT_PRIMARY</span></a>. If <em>dx1</em> is given
 as <strong>-</strong> then it is automatically computed from half the largest symbol size.
-If <em>dx2</em> is given as <strong>-</strong> then it is automatically computed as 1.5
-times the largest symbol size.  Use <strong>-</strong> if
-no <em>fill</em> or outline (<em>pen</em>) is required. Alternatively, the <em>fill</em>
+If <em>dx2</em> is given as <strong>-</strong> then it is automatically computed as the largest
+symbol size plus one character width at the current annotation font size.
+Use <strong>-</strong> if no <em>fill</em> or outline (<em>pen</em>) is required. Alternatively, the <em>fill</em>
 may be specified indirectly via z=<em>value</em> and the color is assigned
 via the CPT look-up (requires a prior <strong>A</strong> code).  When plotting just a
 symbol, without text, <em>dx2</em> and <em>text</em> can be omitted.  The <em>dx1</em> value
@@ -426,9 +427,9 @@ ellipse, wedge, mathangle) may take more than a single argument size.
 Note that for a line segment you should use the horizontal dash symbol (<strong>-</strong>).
 If just a single size if given then we will provide reasonable
 arguments to plot the symbol  (See <a class="reference internal" href="#defaults">Defaults</a>).
-Alternatively, combine the required
-arguments into a single, comma-separated string and use that as the
-symbol size (again, see <a class="reference internal" href="plot.html"><span class="doc">plot</span></a> for details on the arguments needed).</p>
+Alternatively, combine the required arguments into a single, comma-separated
+string and use that as the symbol size (again, see <a class="reference internal" href="plot.html"><span class="doc">plot</span></a> for details on
+the arguments needed).</p>
 </dd>
 <dt><strong>T</strong> <em>paragraph-text</em></dt><dd><p>One or more of these <strong>T</strong> records with <em>paragraph-text</em> printed
 with <a class="reference internal" href="gmt.conf.html#term-FONT_ANNOT_PRIMARY"><span class="xref std std-term">FONT_ANNOT_PRIMARY</span></a>. To specify special positioning and
@@ -450,8 +451,10 @@ If no horizontal line is desired simply give - as <em>pen</em> to <strong>D</str
 <h2>Defaults<a class="headerlink" href="#defaults" title="Permalink to this headline">¶</a></h2>
 <p>When attributes are not provided, or extended symbol information (for symbols taking more than just an overall size) are
 not given as comma-separated quantities, we will provide the following defaults:</p>
+<p>Geographic symbols: If <em>size</em> is given as <strong>-</strong> then we default to the character height at the current annotation font size.</p>
+<p>Line/vector: If <em>size</em> is given as <strong>-</strong> then we default to a length of 2.5 times the character width at the current annotation font size.</p>
 <p>Front: The <em>size</em> argument is <em>length</em>[/<em>gap</em>[<em>ticklength</em>]]. Front symbol is left-side (here, that means upper side) box,
-with <em>ticklength</em> set 30% of the given symbol <em>length (if not specified separately), and *gap</em> defaulting to -1 (one
+with <em>ticklength</em> set 30% of the given symbol <em>length</em> (if not specified separately), and <em>gap</em> defaulting to -1 (one
 entered front symbol) if not specified.  Modifiers to the symbol argument can be provided.</p>
 <p>Vector: Head size is 30% of given symbol size.</p>
 <p>Ellipse: Minor axis is 65% of major axis (the symbol size), with an azimuth of 0 degrees.</p>
@@ -568,8 +571,8 @@ directly.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 

@@ -5,13 +5,13 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>6. GMT Map Projections &mdash; GMT 6.3.0 documentation</title>
+  <title>6. GMT Map Projections &mdash; GMT 6.4.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
       <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" type="text/css" />
       <link rel="stylesheet" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" type="text/css" />
       <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -27,7 +27,7 @@
         <script src="../_static/clipboard.min.js"></script>
         <script src="../_static/copybutton.js"></script>
         <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -49,7 +49,7 @@
             <a href="../index.html" class="icon icon-home"> GMT
           </a>
               <div class="version">
-                6.3
+                6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -65,6 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../gallery.html">Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../animations.html">Animations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial_jl.html">Tutorial in Julia</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
 <ul class="current">
@@ -309,7 +310,7 @@ meaning.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jg-pers"><span class="std std-ref">General perspective</span></a></p></td>
 <td><p><strong>-Jg</strong>|<strong>G</strong></p></td>
 <td><p><strong>-Jnsper/</strong></p></td>
-<td><p>lon<sub>0</sub>/lat<sub>0</sub>/<em>alt</em>/<em>azim</em>/<em>tilt</em>/<em>twist</em>/<em>W</em>/<em>H</em>/<em>scale</em>|<em>width</em></p></td>
+<td><p>lon<sub>0</sub>/lat<sub>0</sub><em>/</em><em>scale</em>|<em>width</em>[<strong>+a</strong><em>azimuth</em>][<strong>+t</strong><em>tilt</em>][<strong>+v</strong><em>vwidth/vheight</em>][<strong>+w</strong><em>twist</em>][<strong>+z</strong><em>altitude</em>[<strong>r</strong>|<strong>R</strong>]|<strong>g</strong>]</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#jh"><span class="std std-ref">Hammer equal area</span></a></p></td>
 <td><p><strong>-Jh</strong>|<strong>H</strong></p></td>
@@ -592,7 +593,7 @@ longitude:</p>
 <ul class="simple">
 <li><p>The longitude (<em>lon0</em>) and latitude (<em>lat0</em>) of the projection center.</p></li>
 <li><p>Optionally, the <em>horizon</em>, i.e., the number of degrees from the center to the edge (&lt;=180) [default is 90].</p></li>
-<li><p>The <em>scale</em> as 1:xxxxx or as radius/latitude where radius is the projected distance on the map from projection center
+<li><p>The <em>scale</em> as 1:xxxxx or as <em>radius/latitude</em> where <em>radius</em> is the projected distance on the map from projection center
 to an oblique latitude where 0 would be the oblique Equator (with <strong>-Ja</strong>) or map <em>width</em>
 <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> (with <strong>-JA</strong>).</p></li>
 </ul>
@@ -679,14 +680,15 @@ gmt end show
 <ul class="simple">
 <li><p>The longitude (<em>lon0</em>) and latitude (<em>lat0</em>) of the projection center.</p></li>
 <li><p>Optionally, the <em>horizon</em>, i.e., the number of degrees from the center to the edge (&lt; 180) [default is 90].</p></li>
-<li><p>Scale as 1:xxxxx (true scale at pole), slat/1:xxxxx (true scale at standard parallel slat), or radius/latitude where
-radius is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from projection center to a particular oblique latitude
-(with <strong>-Js</strong>) or simply map <em>width</em> in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> (with <strong>-JS</strong>).</p></li>
+<li><p>Scale (via <strong>-Js</strong>) may be provided in one of three flavors: Append 1:xxxxx (true scale at pole), <em>slat</em>/1:xxxxx
+(true scale at standard parallel <em>slat</em> for the polar aspect only), or <em>radius/latitude</em> (where <em>radius</em> is
+distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from projection center to a particular oblique latitude).</p></li>
+<li><p>Alternatively, simply append map <em>width</em> in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> (with <strong>-JS</strong>).</p></li>
 </ul>
 <p><strong>Description</strong></p>
 <p>This is a conformal, azimuthal projection that dates back to the Greeks. Its main use is for mapping the polar regions.
 In the polar aspect all meridians are straight lines and parallels are arcs of circles. While this is the most common
-use it is possible to select any point as the center of projection. The requirements are</p>
+use it is possible to select any point as the center of projection.</p>
 <p>A map scale factor of 0.9996 will be applied by default (although you may change this with <a class="reference internal" href="../gmt.conf.html#term-PROJ_SCALE_FACTOR"><span class="xref std std-term">PROJ_SCALE_FACTOR</span></a>).
 However, the setting is ignored when a standard parallel has been specified since the scale is then implicitly given.
 We will look at two different types of maps.</p>
@@ -763,7 +765,7 @@ next to its equal-area cousin in the Section <a class="reference internal" href=
 <p><strong>Required Parameters</strong></p>
 <ul class="simple">
 <li><p>The longitude (<em>lon0</em>) and latitude (<em>lat0</em>) of the projection center.</p></li>
-<li><p>The <em>scale</em> as 1:xxxxx or as radius/latitude where radius is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
+<li><p>The <em>scale</em> as 1:xxxxx or as <em>radius/latitude</em> where <em>radius</em> is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
 projection center to a particular oblique latitude (with <strong>-Jg</strong>), or map width in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a>
 (with <strong>-JG</strong>).</p></li>
 </ul>
@@ -807,7 +809,7 @@ following <a class="reference internal" href="../coast.html"><span class="doc">c
 <ul class="simple">
 <li><p>The longitude (<em>lon0</em>) and latitude (<em>lat0</em>) of the projection center.</p></li>
 <li><p>Optionally, the <em>horizon</em>, i.e., the number of degrees from the center to the edge (&lt;=90) [default is 90].</p></li>
-<li><p>The <em>scale</em> as 1:xxxxx or as radius/latitude where radius is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
+<li><p>The <em>scale</em> as 1:xxxxx or as <em>radius/latitude</em> where <em>radius</em> is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
 projection center to a particular oblique latitude (with <strong>-Jg</strong>), or map width in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a>
 (with <strong>-JG</strong>).</p></li>
 </ul>
@@ -841,7 +843,7 @@ command:</p>
 <ul class="simple">
 <li><p>The longitude (<em>lon0</em>) and latitude (<em>lat0</em>) of the projection center.</p></li>
 <li><p>Optionally, the <em>horizon</em>, i.e., the number of degrees from the center to the edge (&lt;=180) [default is 180].</p></li>
-<li><p>The <em>scale</em> as 1:xxxxx or as radius/latitude where radius is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
+<li><p>The <em>scale</em> as 1:xxxxx or as <em>radius/latitude</em> where <em>radius</em> is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
 projection center to a particular oblique latitude (with <strong>-Je</strong>), or map width in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a>
 (with <strong>-JE</strong>).</p></li>
 </ul>
@@ -875,7 +877,7 @@ perimeter:</p>
 <ul class="simple">
 <li><p>The longitude (<em>lon0</em>) and latitude (<em>lat0</em>) of the projection center.</p></li>
 <li><p>Optionally, the <em>horizon</em>, i.e., the number of degrees from the center to the edge (&lt;90) [default is 60].</p></li>
-<li><p>The <em>scale</em> as 1:xxxxx or as radius/latitude where radius is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
+<li><p>The <em>scale</em> as 1:xxxxx or as <em>radius/latitude</em> where radius is distance on map in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a> from
 projection center to a particular oblique latitude (with <strong>-Jf</strong>), or map width in <a class="reference internal" href="features.html#plt-units"><span class="std std-ref">plot-units</span></a>
 (with <strong>-JF</strong>).</p></li>
 </ul>
@@ -1860,8 +1862,8 @@ file.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, The GMT Team..
-      <span class="lastupdated">Last updated on Nov 18, 2021.
+    <p>&#169; Copyright 2022, The GMT Team..
+      <span class="lastupdated">Last updated on Jan 11, 2022.
       </span></p>
   </div>
 
